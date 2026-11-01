@@ -1,81 +1,248 @@
-# WebApp boilerplate with React JS and Flask API
+# Pluxis
 
-Build web applications using React.js for the front end and python/flask for your backend API.
+**Vive experiencias que merecen ser recordadas.**
 
-- Documentation can be found here: https://4geeks.com/docs/start/react-flask-template
-- Here is a video on [how to use this template](https://www.loom.com/share/f37c6838b3f1496c95111e515e83dd9b)
-- Integrated with Pipenv for package managing.
-- Fast deployment to Render [in just a few steps here](https://4geeks.com/docs/start/deploy-to-render-com).
-- Use of .env file.
-- SQLAlchemy integration for database abstraction.
+Pluxis es una aplicación web Full Stack para descubrir, explorar y reservar eventos. Permite consultar actividades, buscar eventos cercanos, gestionar reservas y acceder a funcionalidades personalizadas mediante autenticación de usuarios.
 
-### 1) Installation:
+El proyecto está desarrollado con React y Vite en el frontend, Python y Flask en el backend y PostgreSQL como base de datos.
 
-> If you use Github Codespaces (recommended) or Gitpod this template will already come with Python, Node and the Posgres Database installed. If you are working locally make sure to install Python 3.10, Node 
+## Características principales
 
-It is recomended to install the backend first, make sure you have Python 3.10, Pipenv and a database engine (Posgress recomended)
+- Registro e inicio de sesión de usuarios.
+- Autenticación mediante JSON Web Tokens (JWT).
+- Protección de rutas privadas.
+- Gestión y publicación de eventos.
+- Organización de eventos por categorías.
+- Consulta de información detallada de eventos.
+- Búsqueda de eventos cercanos mediante geolocalización.
+- Introducción manual de ubicaciones.
+- Gestión de reservas.
+- Subida y almacenamiento de imágenes mediante Cloudinary.
+- Recuperación de contraseñas mediante correo electrónico.
+- Interfaz responsive.
+### Importante. Cuentas de  organizador  y usuario:
+Organizador:  email: laura@eventify.com   password: 123456
+Usuario: email: carlos@eventify.com password: 123456
+Se pueden crear perfiles de usuarios desde el registro, pero no perfiles de organizadores ya que por seguridad lo gestionariamos nosotros
 
-1. Install the python packages: `$ pipenv install`
-2. Create a .env file based on the .env.example: `$ cp .env.example .env`
-3. Install your database engine and create your database, depending on your database you have to create a DATABASE_URL variable with one of the possible values, make sure you replace the valudes with your database information:
+## Tecnologías utilizadas
 
-| Engine    | DATABASE_URL                                        |
-| --------- | --------------------------------------------------- |
-| SQLite    | sqlite:////test.db                                  |
-| MySQL     | mysql://username:password@localhost:port/example    |
-| Postgress | postgres://username:password@localhost:5432/example |
+### Frontend
 
-4. Migrate the migrations: `$ pipenv run migrate` (skip if you have not made changes to the models on the `./src/api/models.py`)
-5. Run the migrations: `$ pipenv run upgrade`
-6. Run the application: `$ pipenv run start`
+- React 18
+- JavaScript ES6+
+- Vite 4
+- React Router DOM 6
+- HTML5
+- CSS3
+- Bootstrap 5
+- Font Awesome 6
+- Fetch API
+- PropTypes
 
-> Note: Codespaces users can connect to psql by typing: `psql -h localhost -U gitpod example`
+### Backend
 
-### Undo a migration
+- Python 3.13
+- Flask
+- Flask-SQLAlchemy
+- SQLAlchemy
+- Flask-Migrate
+- Flask-JWT-Extended
+- Flask-CORS
+- Flask-Swagger
+- Flask-Admin
+- bcrypt
+- Gunicorn
 
-You are also able to undo a migration by running
+### Base de datos
 
-```sh
-$ pipenv run downgrade
+- PostgreSQL
+- Psycopg2
+
+### Servicios externos
+
+| Servicio | Funcionalidad |
+| Cloudinary | Almacenamiento de imágenes |
+| Geoapify | Geolocalización y búsqueda de ubicaciones |
+| Gmail SMTP | Envío de correos de recuperación de contraseña |
+
+### Herramientas
+
+- Git
+- GitHub
+- GitHub Codespaces
+- Postman
+- Pipenv
+- npm
+
+## Arquitectura
+
+Pluxis utiliza una arquitectura cliente-servidor.
+
+- **Frontend:** interfaz desarrollada con React y Vite.
+- **Backend:** API REST desarrollada con Flask.
+- **Base de datos:** PostgreSQL gestionada mediante SQLAlchemy.
+- **Autenticación:** JWT y contraseñas protegidas mediante bcrypt.
+- **Servicios externos:** Cloudinary, Geoapify y SMTP.
+
+## Estructura del proyecto
+
+```text
+Pluxis/
+│
+├── migrations/
+│   └── versions/
+│
+├── public/
+│
+├── src/
+│   ├── api/
+│   │   ├── admin.py
+│   │   ├── commands.py
+│   │   ├── models.py
+│   │   ├── routes.py
+│   │   └── utils.py
+│   │
+│   ├── front/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── pages/
+│   │   ├── utils/
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── routes.jsx
+│   │   └── store.js
+│   │
+│   ├── app.py
+│   └── wsgi.py
+│
+├── .env.example
+├── .gitignore
+├── package.json
+├── Pipfile
+├── Pipfile.lock
+├── render.yaml
+├── render_build.sh
+└── README.md
 ```
 
-### Backend Populate Table Users
+## Instalación local
 
-To insert test users in the database execute the following command:
+### Requisitos
 
-```sh
-$ flask insert-test-users 5
+- Python 3.13
+- Node.js 20 o superior
+- npm
+- Pipenv
+- PostgreSQL
+
+### 1. Clonar el repositorio
+
+```bash
+git clone URL_DEL_REPOSITORIO
+cd Pluxis
 ```
 
-And you will see the following message:
+### 2. Instalar dependencias del frontend
 
-```
-  Creating test users
-  test_user1@test.com created.
-  test_user2@test.com created.
-  test_user3@test.com created.
-  test_user4@test.com created.
-  test_user5@test.com created.
-  Users created successfully!
+```bash
+npm install
 ```
 
-### **Important note for the database and the data inside it**
+### 3. Instalar dependencias del backend
 
-Every Github codespace environment will have **its own database**, so if you're working with more people eveyone will have a different database and different records inside it. This data **will be lost**, so don't spend too much time manually creating records for testing, instead, you can automate adding records to your database by editing ```commands.py``` file inside ```/src/api``` folder. Edit line 32 function ```insert_test_data``` to insert the data according to your model (use the function ```insert_test_users``` above as an example). Then, all you need to do is run ```pipenv run insert-test-data```.
+```bash
+pipenv install
+```
 
-### Front-End Manual Installation:
+### 4. Configurar las variables de entorno
 
--   Make sure you are using node version 20 and that you have already successfully installed and runned the backend.
+Crear un archivo `.env` en la raíz del proyecto tomando como referencia `.env.example`.
 
-1. Install the packages: `$ npm install`
-2. Start coding! start the webpack dev server `$ npm run start`
+Configurar las credenciales de PostgreSQL y los servicios externos.
 
-## Publish your website!
+### 5. Ejecutar el backend
 
-This boilerplate it's 100% read to deploy with Render.com and Heroku in a matter of minutes. Please read the [official documentation about it](https://4geeks.com/docs/start/deploy-to-render-com).
+```bash
+pipenv run python src/app.py
+```
 
-### Contributors
+### 6. Ejecutar el frontend
 
-This template was built as part of the 4Geeks Academy [Coding Bootcamp](https://4geeksacademy.com/us/coding-bootcamp) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and many other contributors. Find out more about our [Full Stack Developer Course](https://4geeksacademy.com/us/coding-bootcamps/part-time-full-stack-developer), and [Data Science Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/datascience-machine-learning).
+En otra terminal:
 
-You can find other templates and resources like this at the [school github page](https://github.com/4geeksacademy/).
+```bash
+npm run dev
+```
+
+### 7. Compilar para producción
+
+```bash
+npm run build
+```
+
+Los archivos compilados se generan en la carpeta `dist/`.
+
+## Variables de entorno
+
+### Backend
+
+```env
+DATABASE_URL=
+JWT_SECRET_KEY=
+
+FLASK_DEBUG=0
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+GEOAPIFY_API_KEY=
+
+FRONTEND_URL=
+
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_DEFAULT_SENDER=
+MAIL_USE_SSL=false
+MAIL_USE_TLS=true
+```
+
+### Frontend
+
+```env
+VITE_BACKEND_URL=
+```
+
+`VITE_BACKEND_URL` debe contener la dirección base del backend, sin añadir `/api`.
+
+**Seguridad:** nunca subir el archivo `.env` ni publicar credenciales, contraseñas o claves privadas en GitHub.
+
+## Seguridad y autenticación
+
+- Autenticación mediante JWT.
+- Contraseñas protegidas mediante bcrypt.
+- Rutas privadas y control de acceso.
+- Gestión de sesiones y cierre de sesión cuando expira el token.
+- Configuración CORS.
+- Variables de entorno para credenciales y configuración.
+- Recuperación de contraseña mediante enlaces temporales.
+
+## Despliegue
+
+El proyecto incluye archivos de configuración para preparar su despliegue en Render:
+
+- `render.yaml`
+- `render_build.sh`
+- `Procfile`
+- `Dockerfile.render`
+
+El despliegue en producción está pendiente de completar y verificar.
+
+## Autor: Aldo Alcivar Ferrin
+
+Proyecto Full Stack desarrollado como aplicación web para descubrir y gestionar eventos.
+
+**Vive experiencias que merecen ser recordadas.**

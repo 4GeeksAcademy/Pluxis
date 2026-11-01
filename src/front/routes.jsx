@@ -1,30 +1,138 @@
-// Import necessary components and functions from react-router-dom.
-
-import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Route,
-} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
-import { Single } from "./pages/Single";
-import { Demo } from "./pages/Demo";
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { ResetPassword } from "./pages/ResetPassword";
+import { Events } from "./pages/Events";
+import { EventDetail } from "./pages/EventDetail";
+import { Bookings } from "./pages/Bookings";
+import { Organizer } from "./pages/Organizer";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 
-export const router = createBrowserRouter(
-    createRoutesFromElements(
-    // CreateRoutesFromElements function allows you to build route elements declaratively.
-    // Create your routes here, if you want to keep the Navbar and Footer in all views, add your new routes inside the containing Route.
-    // Root, on the contrary, create a sister Route, if you have doubts, try it!
-    // Note: keep in mind that errorElement will be the default page when you don't get a route, customize that page to make your project more attractive.
-    // Note: The child paths of the Layout element replace the Outlet component with the elements contained in the "element" attribute of these child paths.
 
-      // Root Route: All navigation will start from here.
-      <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
+// ============================================================
+// RUTA PRIVADA
+// ============================================================
 
-        {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
-        <Route path= "/" element={<Home />} />
-        <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
-        <Route path="/demo" element={<Demo />} />
-      </Route>
-    )
-);
+const PrivateRoute = ({ children }) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        window.location.href = "/login";
+        return null;
+    }
+
+    return children;
+};
+
+
+// ============================================================
+// RUTA PARA ORGANIZADORES
+// ============================================================
+
+const OrganizerRoute = ({ children }) => {
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+
+    if (!token) {
+        window.location.href = "/login";
+        return null;
+    }
+
+    if (!user || user.role !== "organizer") {
+        window.location.href = "/";
+        return null;
+    }
+
+    return children;
+};
+
+
+// ============================================================
+// ROUTER PRINCIPAL
+// ============================================================
+
+export const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Layout />,
+        errorElement: <h1>Not found!</h1>,
+
+        children: [
+
+            // ------------------------------------------------
+            // PÚBLICAS
+            // ------------------------------------------------
+
+            {
+                index: true,
+                element: <Home />,
+            },
+
+            {
+                path: "login",
+                element: <Login />,
+            },
+
+            {
+                path: "register",
+                element: <Register />,
+            },
+
+            {
+                path: "forgot-password",
+                element: <ForgotPassword />,
+            },
+
+            {
+                path: "reset-password",
+                element: <ResetPassword />,
+            },
+
+            {
+                path: "events",
+                element: <Events />,
+            },
+
+            {
+                path: "events/:id",
+                element: <EventDetail />,
+            },
+
+            {
+                path: "privacy-policy",
+                element: <PrivacyPolicy />,
+            },
+
+
+            // ------------------------------------------------
+            // PRIVADAS
+            // ------------------------------------------------
+
+            {
+                path: "bookings",
+                element: (
+                    <PrivateRoute>
+                        <Bookings />
+                    </PrivateRoute>
+                ),
+            },
+
+
+            // ------------------------------------------------
+            // ORGANIZADOR
+            // ------------------------------------------------
+
+            {
+                path: "organizer",
+                element: (
+                    <OrganizerRoute>
+                        <Organizer />
+                    </OrganizerRoute>
+                ),
+            },
+        ],
+    },
+]);
